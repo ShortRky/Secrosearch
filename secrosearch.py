@@ -118,3 +118,75 @@ password_entry.delete(0, tk.END)
 # Clear the sign up UI
 signup_username_entry.delete(0, tk.END)
 signup_password_entry.delete(0, tk.END)
+
+def login(self):
+    # Get the username and password from the entry fields
+    username = self.username_entry.get()
+    password = self.password_entry.get()
+    
+    # Hash the password for comparison
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    
+    # Check if the entered username and password match any existing user in the database
+    if username in users and users[username] == hashed_password:
+        print("Login successful!")
+        # Clear the login UI
+        self.username_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
+        # Add a search bar
+        search_frame = tk.Frame(self.root)
+        search_frame.pack()
+        search_entry = tk.Entry(search_frame)
+        search_entry.pack()
+        # Add a Button to submit the search
+        search_button = tk.Button(search_frame, text="Search", command=lambda: self.search(search_entry.get()))
+        search_button.pack()
+        # Add a Button to clear the search history
+        clear_history_button = tk.Button(search_frame, text="Clear History", command=self.clear_history)
+        clear_history_button.pack()
+        clear_history_button.config(state="disabled")
+    else:
+        print("Invalid username or password")
+       
+    class LoginSignupApp:
+     def __init__(self, root, username_entry, password_entry, max_failed_attempts=5):
+        self.root = root
+        self.username_entry = username_entry
+        self.password_entry = password_entry
+        self.max_failed_attempts = max_failed_attempts
+        self.failed_attempts = 0
+
+    def login(self):
+        # Get the username and password from the entry fields
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        # Hash the password for comparison
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+        # Check if the entered username and password match any existing user in the database
+        if username in users and users[username] == hashed_password:
+            print("Login successful!")
+            # Clear the login UI
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            # Add a search bar
+            search_frame = tk.Frame(self.root)
+            search_frame.pack()
+            search_entry = tk.Entry(search_frame)
+            search_entry.pack()
+            # Add a Button to submit the search
+            search_button = tk.Button(search_frame, text="Search", command=lambda: self.search(search_entry.get()))
+            search_button.pack()
+            # Add a Button to clear the search history
+            clear_history_button = tk.Button(search_frame, text="Clear History", command=self.clear_history)
+            clear_history_button.pack()
+            clear_history_button.config(state="disabled")
+            # Reset the failed attempt counter
+            self.failed_attempts = 0
+        else:
+            print("Invalid username or password")
+            self.failed_attempts += 1
+            if self.failed_attempts >= self.max_failed_attempts:
+                print(f"Maximum number of failed attempts ({self.max_failed_attempts}) reached. Exiting program.")
+                exit()
